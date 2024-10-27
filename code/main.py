@@ -1,6 +1,8 @@
 import pygame
 from os.path import join
 import random
+
+import pygame.locals
 #join is a method to put all together images you want 
 # random = also a method to make random happen =)
 #general setup
@@ -15,13 +17,27 @@ screen = pygame.display.set_mode((WIDTH,HEIGHT))
 clock = pygame.time.Clock()
 running = True
 
-#testing place surface retangle
+#place surface 
+path_meteor = join('images','meteor.png')
 
-path = join('images','space_ship.png')
+
+
+path_laser = join('images','laser.png')
+laser = pygame.image.load(path_laser).convert_alpha()
+meteor = pygame.image.load(path_meteor).convert_alpha()
 path_star = join('images','star.png')
-
 stars = pygame.image.load(path_star).convert_alpha()
+
+path = join('images','space-ship.png')
 space_ship = pygame.image.load(path).convert_alpha()
+position_space_ship = space_ship.get_rect(center = (WIDTH / 2, HEIGHT / 2) )
+position_meteor = meteor.get_rect(center = (WIDTH / 2, HEIGHT / 2) )
+position_laser = laser.get_rect(bottomleft=(20, HEIGHT - 20))
+direction = 1
+
+
+
+
 #convert or covert_alpha is for pygame can do a better perfomace
 # space_ship = pygame.image.load('images/space-ship.png') if you put '..images/'
 #  if the folder called 'images' is not in the game files will goes on but isn't a good way to make it
@@ -61,7 +77,18 @@ while running :
     screen.fill('darkgray')
     for places in stars_positions:
         screen.blit(stars,places)
-    screen.blit(space_ship,(100,150))
+    position_space_ship.left += direction 
+    if position_space_ship.right > WIDTH or position_space_ship.left <= 0 :
+        direction *= -1
+   
+# the space ship goes to the right until reaches the window WIDTH the conditional above stops it 
+# because of the oppositional moviment
+    screen.blit(meteor,position_meteor)
+    screen.blit(space_ship,position_space_ship)
+    screen.blit(laser,position_laser)
+
+    
+    
     
     
     
