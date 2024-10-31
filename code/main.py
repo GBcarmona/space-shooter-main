@@ -33,9 +33,10 @@ space_ship = pygame.image.load(path).convert_alpha()
 position_space_ship = space_ship.get_rect(center = (WIDTH / 2, HEIGHT / 2) )
 position_meteor = meteor.get_rect(center = (WIDTH / 2, HEIGHT / 2) )
 position_laser = laser.get_rect(bottomleft=(20, HEIGHT - 20))
-direction = 1
+position_shipp_direction = pygame.math.Vector2(1,0)
+shipp_speed = 100
 
-
+#Vector != array => if you do [1,2,3] times 2 the output will be [1,2,3,1,2,3] and the Vector will multiple the numbers
 
 
 #convert or covert_alpha is for pygame can do a better perfomace
@@ -69,7 +70,10 @@ stars_positions = random_star(20)
 # in while loop ==> for position in star position : screen.blit(stars,position)
         
 while running :
-    # inside the while loops the game will run
+    dt = clock.tick(60) / 1000
+    # print(clock.get_fps()) show the rendered fps or Frame Per Second
+    #delta time = dt is the time that yout computer gtake to render a frame 
+    # inside the while loops the game will run 
     for event in pygame.event.get() :
         if event.type == pygame.QUIT :
             running = False
@@ -77,9 +81,10 @@ while running :
     screen.fill('darkgray')
     for places in stars_positions:
         screen.blit(stars,places)
-    position_space_ship.left += direction 
-    if position_space_ship.right > WIDTH or position_space_ship.left <= 0 :
-        direction *= -1
+  
+    position_space_ship.center += position_shipp_direction * shipp_speed * dt
+
+    
    
 # the space ship goes to the right until reaches the window WIDTH the conditional above stops it 
 # because of the oppositional moviment
