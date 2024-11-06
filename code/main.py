@@ -33,8 +33,8 @@ space_ship = pygame.image.load(path).convert_alpha()
 position_space_ship = space_ship.get_rect(center = (WIDTH / 2, HEIGHT / 2) )
 position_meteor = meteor.get_rect(center = (WIDTH / 2, HEIGHT / 2) )
 position_laser = laser.get_rect(bottomleft=(20, HEIGHT - 20))
-position_shipp_direction = pygame.math.Vector2(1,0)
-shipp_speed = 100
+position_shipp_direction = pygame.math.Vector2()
+shipp_speed = 300
 
 #Vector != array => if you do [1,2,3] times 2 the output will be [1,2,3,1,2,3] and the Vector will multiple the numbers
 
@@ -70,19 +70,50 @@ stars_positions = random_star(20)
 # in while loop ==> for position in star position : screen.blit(stars,position)
         
 while running :
-    dt = clock.tick(60) / 1000
+    dt = clock.tick() / 1000
     # print(clock.get_fps()) show the rendered fps or Frame Per Second
     #delta time = dt is the time that yout computer gtake to render a frame 
     # inside the while loops the game will run 
     for event in pygame.event.get() :
         if event.type == pygame.QUIT :
             running = False
+        # if event.type == pygame.KEYDOWN and event.type == pygame.K_1 :
+        #     print(1)
+        # if event.type == pygame.MOUSEMOTION : 
+        #     position_space_ship.center = event.pos
+
+    keys = pygame.key.get_pressed()
+    # if keys[pygame.K_RIGHT]:  # checks if the right key is on
+    #     position_shipp_direction.x = 1  # direction to the right 
+    #     position_space_ship.center += position_shipp_direction * dt * shipp_speed
+    # EASIER WAY TO DO THAT : return a boolean
+    position_shipp_direction.x = int(keys[pygame.K_RIGHT]) - int(keys[pygame.K_LEFT])
+    position_shipp_direction.y = int(keys[pygame.K_DOWN]) - int(keys[pygame.K_UP]) 
+
+    
+         
     
     screen.fill('darkgray')
     for places in stars_positions:
         screen.blit(stars,places)
   
     position_space_ship.center += position_shipp_direction * shipp_speed * dt
+    # # this makes the space ship object moves 
+    if position_space_ship.left <= 0 : 
+         position_shipp_direction.x = 1.0
+    elif position_space_ship.right >= WIDTH :
+         position_shipp_direction.x = -1.0
+   
+    if position_space_ship.top <= 0 : 
+         position_shipp_direction.y = 1.0
+    elif position_space_ship.bottom >= HEIGHT :
+         position_shipp_direction.y = -1.0
+
+# if position_space_ship.buttom <= HEIGHT or position_space_ship.top > 0 :
+#    position_shipp_direction.y = 1.0
+# if position_space_ship.right <= WIDTH or position_space_ship.left > 0 : 
+#    position_shipp_direction.x = 1.0
+# 
 
     
    
